@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+    <a class="navbar-brand" href="{% url 'home' %}">ModularApp</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'product_list' %}">Products</a>
+            </li>
+            {% if user.is_authenticated and user.is_superuser %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'module_list' %}">Modules</a>
+            </li>
+            {% endif %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if user.is_authenticated %}
+                    Hi, {{ request.user.username }}
+                    {% else %}
+                    Login
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                    {% if user.is_authenticated %}
+                    <li>
+                        <h6 class="dropdown-header">Signed in as <strong>{{ user.username }}</strong></h6>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                        <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2"
+                            href="{% url 'login' %}?next={{ request.get_full_path|urlencode }}">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+            </li>
+        </ul>
+    </div>
+</nav>

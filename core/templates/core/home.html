@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}Home
+
+{% block content %}
+
+<div class="container mt-5">
+    {% if user.is_authenticated %}
+    <h1>Welcome, {{ request.user.username }}!</h1>
+    <p>This is the home page of the Modular App.</p>
+    {% else %}
+    <h1>Welcome!</h1>
+    <p>This is the home page of the Modular App.</p>
+    <div class="alert alert-warning">
+        You are not logged in. Please <a href="{% url 'login' %}">login here</a>.
+    </div>
+    {% endif %}
+</div>
+
+{% endblock content %}
