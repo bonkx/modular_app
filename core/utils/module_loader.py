@@ -1,9 +1,9 @@
+import os
 import subprocess
 from django.conf import settings
+from pathlib import Path
 
 from core.models import ModuleRegistry
-
-AVAILABLE_MODULES = getattr(settings, "AVAILABLE_MODULES", [])
 
 
 def get_available_modules():
@@ -22,8 +22,27 @@ def run_management_command(*args):
     Returns:
         True if successful (exit code 0), False if unsuccessful.
     """
+
+    # --- Find the path to manage.py relatively ---
+    # For example, this file is stored in the project root or one level above manage.py.
+    BASE_DIR = Path(__file__).resolve().parent
+
+    # Loop up until you find manage.py
+    while not (BASE_DIR / 'manage.py').exists() and BASE_DIR != BASE_DIR.parent:
+        BASE_DIR = BASE_DIR.parent
+
+    if not (BASE_DIR / 'manage.py').exists():
+        raise FileNotFoundError("manage.py not found in parent directories.")
+
     print(f"\n🚀 Running: python manage.py {' '.join(args)}")
-    result = subprocess.run(['python', 'manage.py', *args, '--noinput'], capture_output=True, text=True)
+
+    command = ['python', 'manage.py', *args, '--noinput']
+    result = subprocess.run(
+        command,
+        cwd=str(BASE_DIR),
+        capture_output=True,
+        text=True
+    )
 
     if result.returncode == 0:
         print("Command succeeded.")
