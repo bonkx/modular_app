@@ -62,7 +62,7 @@ python manage.py init_modules       # Add default product_module to ModuleRegist
 python manage.py init_users         # Create superuser, manager, and user default.
 
 or
-python manage.py setup_project    # with 1 function command to setup all initial data
+python manage.py setup_project    # with 1 function command to setup all initial data + migrate DB
 ```
 
 ### 6. Run Server
